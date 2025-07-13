@@ -1,0 +1,41 @@
+<main>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Univers Zahrat - Jeux</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1 class="animated-text">𝖹𝖺𝗁𝗋𝖺𝗍’𝗌  🎮</h1>
+</header>
+
+<main>
+<div class="game-grid">
+<div class="card" onclick="startGame('eren')">
+<img src="eren.jpg" alt="Eren" />
+<h2>Eren - L’Île du Paradis</h2>
+</div>
+<div class="card" onclick="startGame('spiderman')">
+<img src="spiderman.jpg" alt="Spiderman" />
+<h2>Spiderman - Lance ta toile</h2>
+</div>
+</div>
+
+<canvas id="gameCanvas" width="1200" height="400"></canvas>
+
+<!-- Message de succès -->
+<div id="spidey-game">
+<div id="successMessage" ></div>
+
+<!-- Bouton retour menu -->
+<button id="backToMenuBtn" >Retour Menu</button>
+
+<div id="score" style="display:none;">Score : 0</div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
+</main>
+ 

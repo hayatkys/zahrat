@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Comment tu vas ?</title>
+<style>
+body {
+  background-color: #a4cdec;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.box {
+  background: #5684a9;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #4184e1;
+  text-align: center;
+  max-width: 400px;
+  color: white;
+}
+
+.stars {
+  margin-top: 20px;
+}
+
+.star {
+  font-size: 40px;
+  color: #f4f9fc;
+  cursor: pointer;
+  transition: 0.3s;
+  user-select: none;
+}
+
+.star.selected {
+  color: #0c5687;
+}
+
+.response {
+  font-size: 18px;
+  color: #fffd;
+  margin-top: 15px;
+  min-height: 24px;
+}
+
+.continue-btn {
+  margin-top: 30px;
+  padding: 10px 20px;
+  background:#0c5687;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2 id="questionTitle">how’s my zahi’s doing ?</h2>
+  <div class="stars" id="starsContainer">
+    <span class="star" data-value="1">★</span>
+    <span class="star" data-value="2">★</span>
+    <span class="star" data-value="3">★</span>
+    <span class="star" data-value="4">★</span>
+    <span class="star" data-value="5">★</span>
+  </div>
+  <div class="response" id="response"></div>
+  <button class="continue-btn" id="continueBtn">continuer</button>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "how’s my zahi’s doing ?",
+    messages: {
+      1: "oh no :/ send me a message",
+      2: "we’ll hug !",
+      3: "come here, i'll be higher",
+      4: "ooh that’s great 😁",
+      5: "i think it’s bc of me 😳"
+    },
+    storageKey: 'reponse_question1'
+  },
+  {
+    text: "how much do you wanna be tangled with me rn ?",
+    messages: {
+      1: "not at all",
+      2: "a little… but you won’t say it",
+      3: "if you insist",
+      4: "like..a lot",
+      5: "right now rn 🫠"
+    },
+    storageKey: 'reponse_question2'
+  },
+  {
+    text: "how much do i make your days better (even secretly) ?",
+    messages: {
+      1: "garde la pêche (menteuse)",
+      2: "a little, when you’re bored",
+      3: "pretty distracting, ngl",
+      4: "the best distraction of ur day",
+      5: "totally stealing ur attention(😇)"
+    },
+    storageKey: 'reponse_question3'
+  }
+];
+
+let currentQuestionIndex = 0;
+let selectedValue = null;
+
+const questionTitle = document.getElementById('questionTitle');
+const starsContainer = document.getElementById('starsContainer');
+const responseBox = document.getElementById('response');
+const continueBtn = document.getElementById('continueBtn');
+
+function clearStars() {
+  const stars = starsContainer.querySelectorAll('.star');
+  stars.forEach(star => star.classList.remove('selected'));
+}
+
+function updateStars(value) {
+  clearStars();
+  const stars = starsContainer.querySelectorAll('.star');
+  stars.forEach(star => {
+    if (parseInt(star.getAttribute('data-value')) <= value) {
+      star.classList.add('selected');
+    }
+  });
+}
+
+function loadQuestion(index) {
+  const question = questions[index];
+  questionTitle.textContent = question.text;
+  responseBox.textContent = '';
+  continueBtn.style.display = 'none';
+  selectedValue = null;
+  clearStars();
+
+  // Ajouter les listeners sur les étoiles
+  const stars = starsContainer.querySelectorAll('.star');
+  stars.forEach(star => {
+    star.onclick = () => {
+      selectedValue = parseInt(star.getAttribute('data-value'));
+      updateStars(selectedValue);
+      responseBox.textContent = question.messages[selectedValue];
+      continueBtn.style.display = 'inline-block';
+      continueBtn.textContent = (currentQuestionIndex === questions.length - 1) ? 'allez, tu peux entrer🙄' : 'continuer';
+    };
+  });
+}
+
+continueBtn.addEventListener('click', () => {
+  if (!selectedValue) return; // sécurité
+
+  // Sauvegarder la réponse dans localStorage
+  localStorage.setItem(questions[currentQuestionIndex].storageKey, selectedValue);
+
+  currentQuestionIndex++;
+
+  if (currentQuestionIndex < questions.length) {
+    loadQuestion(currentQuestionIndex);
+  } else {
+    // Fin des questions, redirection ou autre action
+    window.location.href = 'index.html';
+  }
+});
+// Chargement initial
+loadQuestion(currentQuestionIndex);
+</script>
+</body>
+</html>
